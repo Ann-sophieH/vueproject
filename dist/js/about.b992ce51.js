@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["about"],{f820:function(e,n,a){"use strict";a.r(n);var r=a("7a23"),t={class:"about"},i=Object(r["g"])("h1",null,"Here we have fixed redirecting ",-1),c=Object(r["g"])("p",null,"oude links laten staan in paden, maar herverwijzen naar de nieuwe link",-1),u=[i,c];function d(e,n){return Object(r["r"])(),Object(r["f"])("div",t,u)}var o=a("6b0d"),s=a.n(o);const b={},l=s()(b,[["render",d]]);n["default"]=l}}]);
+//# sourceMappingURL=about.b992ce51.js.map
