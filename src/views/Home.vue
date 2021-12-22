@@ -21,7 +21,8 @@
 import Ticket from "@/components/Ticket.vue";
 //import axios from "axios";
 import TicketService from "../services/TicketService";
-import {watchEffect} from "vue"; //BUILTIN component van vue zelf (child comp: methode dus {} nodig) checkt of er veranderingen zijn in de url
+//import {watchEffect} from "vue"; //BUILTIN component van vue zelf (child comp: methode dus {} nodig) checkt of er veranderingen zijn in de url
+import Nprogress from "nprogress";
 
 export default {
   name: "Home",
@@ -35,16 +36,26 @@ export default {
       totalEvents: 0,
     }
   },
-  created() {  //zorgt ervoor dat je ticketservice kan aanspreken, gaat naar link, krijgt antw en dat steek je in this.events
-    watchEffect(()=>{ // gebruikt als inpakpapier e luistert naar de wijziging van de link
-      this.events = null //opnieuw legen van de events
-      TicketService.getEvents(2, this.page).then(response =>{ //this.page=prop
-        this.events = response.data;
-        this.totalEvents = response.headers['x-total-count'] //vaste params: header heeft info over aatal objecten in json 'xtotal' is gekend tussen servers
-      }).catch(error => {console.log(error)})
-    })
-     //error handling
+  //created zorgt ervoor dat je ticketservice kan aanspreken, gaat naar link, krijgt antw en dat steek je in this.events
+    //watchEffect(()=>{ // gebruikt als inpakpapier e luistert naar de wijziging van de link
+      //this.events = null //opnieuw legen van de events
+
+  beforeRouterEnter(routeTo, routeFrom, next) {
+    Nprogress.start();  //
+    TicketService.getEvents(2, parseInt(routeTo.query.page) || 1)
+        .then((response) => {
+          next((comp) => {
+            comp.events = response.data;
+            comp.totalEvents = response.headers["x-total-count"];
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        }).finally(()=>{
+          Nprogress.done();
+    });
   },
+
   computed:{
     hasNextPage(){
       var Totalpages = Math.ceil(this.totalEvents/2) //ceil=afronden nr boven?
